@@ -24,4 +24,71 @@ public class gpswabePolicy {
 	int min_leaves;
 	int attri;
 	ArrayList<Integer> satl = new ArrayList<Integer>();
+	
+	
+	public gpswabePolicy() {
+    }
+	
+	
+	
+	public gpswabePolicy(String attr, int k, gpswabePolicy[] children) {
+        super();
+        this.k = k;
+        this.attr = attr;
+        this.children = children;
+    }
+
+
+
+
+    public String getAttr() {
+        return attr;
+    }
+
+
+
+
+    public void setAttr(String attr) {
+        this.attr = attr;
+    }
+
+
+
+
+    public int getK() {
+        return k;
+    }
+
+
+
+
+    public void setK(int k) {
+        this.k = k;
+    }
+
+
+
+
+    public gpswabePolicy[] getChildren() {
+        return children;
+    }
+
+
+
+
+    public void setChildren(gpswabePolicy[] children) {
+        this.children = children;
+    }
+
+
+
+
+    @Override
+	public String toString() {
+	    String childOutput = "";
+	    for (int i = 0; i < children.length; i++) {
+            childOutput += children[i].toString();
+        }
+	    return "Policy[attr=\""+attr+"\", k="+k+", children=["+childOutput+"]]";
+	}
 }

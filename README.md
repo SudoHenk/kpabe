@@ -7,16 +7,17 @@ Fixed:
 
 * Maven dependencies
 * Serilization issues (as mentioned in https://github.com/LiangZhang716/kpabe/issues/1)
-* Removed some hardcoded paths
+* Removed hardcoded paths in the code
+* Added the posibility for more expressive policies.
 
 
 ## How to setup
 
-* Import this repo into your IDE, mark as Maven project.
-* Use the main method in `Example.java` to run the example.
-* View the output in `/example/`.
+* Import this repo into your IDE, import as a Maven project.
+* Open `Example.java` and change the folder to the location of where you put the project.
+* Run the main method in `Example.java`.
+* View the output in `/example/` of the project folder.
 
 ## Todo
 
 * Cleanup code
-* Fix expressing policies: cannot express all policies (only one treshold can be defined at the moment).

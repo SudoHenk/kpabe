@@ -1,6 +1,8 @@
 package nl.sudohenk.kpabe;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -45,37 +47,86 @@ public class Common {
 		os.write(cphBuf);
 
 		os.close();
-
 	}
-
+	
 	public static byte[][] readKpabeFile(String encfile) throws IOException {
-		int i, len;
-		InputStream is = new FileInputStream(encfile);
-		byte[][] res = new byte[2][];
-		byte[] aesBuf, cphBuf;
+        int i, len;
+        InputStream is = new FileInputStream(encfile);
+        byte[][] res = new byte[2][];
+        byte[] aesBuf, cphBuf;
 
-		/* read aes buf */
-		len = 0;
-		for (i = 3; i >= 0; i--)
-			len |= is.read() << (i * 8);
-		aesBuf = new byte[len];
+        /* read aes buf */
+        len = 0;
+        for (i = 3; i >= 0; i--)
+            len |= is.read() << (i * 8);
+        aesBuf = new byte[len];
 
-		is.read(aesBuf);
+        is.read(aesBuf);
 
-		/* read cph buf */
-		len = 0;
-		for (i = 3; i >= 0; i--)
-			len |= is.read() << (i * 8);
-		cphBuf = new byte[len];
+        /* read cph buf */
+        len = 0;
+        for (i = 3; i >= 0; i--)
+            len |= is.read() << (i * 8);
+        cphBuf = new byte[len];
 
-		is.read(cphBuf);
+        is.read(cphBuf);
 
-		is.close();
+        is.close();
 
-		res[0] = aesBuf;
-		res[1] = cphBuf;
-		return res;
-	}
+        res[0] = aesBuf;
+        res[1] = cphBuf;
+        return res;
+    }
+	
+	public static byte[] writeKpabeStream(byte[] cphBuf, byte[] aesBuf) throws IOException {
+        int i;
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+    
+        /* write aes_buf */
+        for (i = 3; i >= 0; i--)
+            os.write(((aesBuf.length & (0xff << 8 * i)) >> 8 * i));
+        os.write(aesBuf);
+    
+        /* write cph_buf */
+        for (i = 3; i >= 0; i--)
+            os.write(((cphBuf.length & (0xff << 8 * i)) >> 8 * i));
+        os.write(cphBuf);
+    
+        os.close();
+        return os.toByteArray();
+    }
+	
+	public static byte[][] readKpabeStream(byte[] ciphertext) throws IOException {
+        int i, len;
+        InputStream is = new ByteArrayInputStream(ciphertext);
+        byte[][] res = new byte[2][];
+        byte[] aesBuf, cphBuf;
+
+        /* read aes buf */
+        len = 0;
+        for (i = 3; i >= 0; i--)
+            len |= is.read() << (i * 8);
+        aesBuf = new byte[len];
+
+        is.read(aesBuf);
+
+        /* read cph buf */
+        len = 0;
+        for (i = 3; i >= 0; i--)
+            len |= is.read() << (i * 8);
+        cphBuf = new byte[len];
+
+        is.read(cphBuf);
+
+        is.close();
+
+        res[0] = aesBuf;
+        res[1] = cphBuf;
+        return res;
+    }
+	
+
+	
 	/**
 	 * Return a ByteArrayOutputStream instead of writing to a file
 	 */

@@ -5,8 +5,11 @@ import it.unisa.dia.gas.plaf.jpbc.pairing.PairingFactory;
 
 import java.util.ArrayList;
 
-public class SerializeUtils {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+public class SerializeUtils {
+    private static Logger logger = LoggerFactory.getLogger(SerializeUtils.class);
 	/* Method has been test okay */
 	public static void serializeElement(ArrayList<Byte> arrlist, Element e) {
 		byte[] arr_e = e.toBytes();
@@ -292,7 +295,6 @@ public class SerializeUtils {
 	
 		/* children */
 		n = unserializeUint32(arr, offset);
-		System.out.println("number of children is: "+n);
 		offset += 4;
 		if (n == 0) {
 			p.children = null;
@@ -306,12 +308,9 @@ public class SerializeUtils {
 			offset = unserializeElement(arr, offset, p.D);
 		} else {
 			p.children = new gpswabePolicy[n];
-			System.out.println("p.children length is: "+p.children.length);
 			for (i = 0; i < n; i++){
-				System.out.println("\nbefore assignment offset is :"+offset);
 				p.children[i] = unserializePolicy(pub, arr, offset);
 				offset = offset + p.children[i].serilize_cost;
-			    System.out.println("\n now the offset is:"+offset);
 			}
 		}
 		p.serilize_cost += offset;
